@@ -1,0 +1,48 @@
+services:
+  # 1. The State Machine (Postgres)
+  postgres:
+    image: postgres:15-alpine
+    container_name: ai_pipeline_db
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  # 2. The Message Broker (RabbitMQ)
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: ai_pipeline_queue
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS}
+    ports:
+      - "5672:5672"   # API Port for NestJS/Python
+      - "15672:15672" # Visual Management UI Port
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    restart: unless-stopped
+
+  # 3. The Object Storage (MinIO)
+  minio:
+    image: minio/minio
+    container_name: ai_pipeline_storage
+    environment:
+      MINIO_ROOT_USER: ${MINIO_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_PASS}
+    command: server /data --console-address ":9001"
+    ports:
+      - "9000:9000"   # API Port for uploading files
+      - "9001:9001"   # Visual Management UI Port
+    volumes:
+      - minio_data:/data
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  rabbitmq_data:
+  minio_data:

@@ -1,0 +1,44 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// KEEP IT WIH OUT USERS TILL WE VALIDATE THE PIPELINE WORKS, THEN WE CAN ADD USER MANAGEMENT LATER
+
+enum JobStatus {
+  PENDING
+  GENERATING_SCRIPT
+  GENERATING_AUDIO
+  GENERATING_IMAGES
+  RENDERING_VIDEO
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+model VideoJob {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+
+  // FROM USER
+  topic String
+  niche String
+
+  status JobStatus @default(PENDING)
+
+  // WHAT AI WILL GENERATE
+  scriptText String? @db.Text
+  audioUrl   String?
+  videoUrl   String?
+
+  errorLog String? @db.Text
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status])
+}
