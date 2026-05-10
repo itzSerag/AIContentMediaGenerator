@@ -1,11 +1,9 @@
-// Run this command to generate base config and vs code settings:
-// pnpm dlx @antfu/eslint-config@latest
-
 import antfu from "@antfu/eslint-config";
 
-export default antfu({
+const config = antfu({
   type: "app",
   typescript: true,
+  react: false,
   formatters: true,
   stylistic: {
     indent: 2,
@@ -20,12 +18,28 @@ export default antfu({
     "antfu/no-top-level-await": ["off"],
     "node/prefer-global/process": ["off"],
     "node/no-process-env": ["error"],
-    "perfectionist/sort-imports": ["error", {
-      tsconfigRootDir: '.',
-    }],
     "unicorn/filename-case": ["error", {
       case: "kebabCase",
       ignore: ["README.md"],
     }],
   },
 });
+
+// Ignore patterns (replacement for .eslintignore, used by flat config)
+config.ignores = [
+  "node_modules/",
+  "dist/",
+  "build/",
+  ".cache/",
+  ".turbo/",
+  ".prisma/",
+  "prisma/migrations/",
+  ".vscode/",
+  ".idea/",
+  "coverage/",
+  "*.log",
+  ".env",
+  ".DS_Store",
+];
+
+export default config;

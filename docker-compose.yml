@@ -21,7 +21,7 @@ services:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS}
     ports:
-      - "5672:5672"   # API Port for NestJS/Python
+      - "5672:5672" # API Port for NestJS/Python
       - "15672:15672" # Visual Management UI Port
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
@@ -36,8 +36,8 @@ services:
       MINIO_ROOT_PASSWORD: ${MINIO_PASS}
     command: server /data --console-address ":9001"
     ports:
-      - "9000:9000"   # API Port for uploading files
-      - "9001:9001"   # Visual Management UI Port
+      - "9000:9000" # API Port for uploading files
+      - "9001:9001" # Visual Management UI Port
     volumes:
       - minio_data:/data
     restart: unless-stopped

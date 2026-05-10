@@ -2,8 +2,7 @@
   // Disable the default formatter, use eslint instead
   "prettier.enable": false,
   "editor.formatOnSave": false,
-      "prisma.pinToPrisma6": true,
-
+  "prisma.pinToPrisma6": true,
 
   // Auto fix
   "editor.codeActionsOnSave": {
